@@ -1,12 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import LogicElement from '../components/LogicElement';
+import Toolbar from '../components/Toolbar';
 
-const DraggableRectangle = () => {
+const BranchPage = () => {
   const [rectangles, setRectangles] = useState([
-    { id: 1, x: 50, y: 50, width: 200, height: 100, dragging: false },
-    { id: 2, x: 300, y: 150, width: 200, height: 100, dragging: false },
+    { id: 1, x: 50, y: 50 },
+    { id: 2, x: 300, y: 150 },
   ]);
+
+  const refs = useRef({})
   
   const [dragStart, setDragStart] = useState({ id: null, x: 0, y: 0 });
+
+  function createLogicStep() {
+    console.log("wut ")
+    setRectangles([...rectangles, {
+      id: rectangles.length + 1,
+      x: 50,
+      y: 50
+    }])
+  }
+
+  function createActionStep() {
+    console.log('creating...')
+  }
 
   const onDragStart = (id, e) => {
     const rect = rectangles.find(r => r.id === id);
@@ -57,9 +74,18 @@ const DraggableRectangle = () => {
     };
   }, [dragStart, rectangles]);
 
+  useEffect(() => {
+    Object.keys(refs.current).forEach(key => {
+      if (refs.current[key]) {
+        const dimensions = refs.current[key].getBoundingClientRect();
+        console.log(`Dimensions for rectangle ${key}:`, dimensions);
+      }
+    });
+  }, [rectangles])
+
   const getCenter = (rect) => ({
-    x: rect.x + rect.width / 2,
-    y: rect.y + rect.height / 2,
+    x: rect.x,
+    y: rect.y,
   });
 
   // Calculate line coordinates based on rectangles' centers
@@ -74,7 +100,7 @@ const DraggableRectangle = () => {
     <div
       style={{
         width: '100%',
-        height: '500px',
+        height: '100%',
         position: 'relative',
         border: '1px solid black',
         overflow: 'hidden', // Prevents scrollbars from appearing during drag
@@ -90,25 +116,25 @@ const DraggableRectangle = () => {
           strokeWidth="2"
         />
       </svg>
-      {rectangles.map((rectangle) => (
-        <div
+      {rectangles.map((rectangle) => <LogicElement
           key={rectangle.id}
-          style={{
-            width: `${rectangle.width}px`,
-            height: `${rectangle.height}px`,
-            position: 'absolute',
-            top: `${rectangle.y}px`,
-            left: `${rectangle.x}px`,
-            backgroundColor: rectangle.dragging ? '#FFAAAA' : '#FF0000',
-            cursor: 'grab',
+          ref={(el) => {
+            console.log('bruh')
+            if (el && !refs.current[rectangle.id]) {
+              console.log('yo what we settin')
+              refs.current[rectangle.id] = el;
+            }
           }}
-          onMouseDown={(e) => onDragStart(rectangle.id, e)}
+          x={rectangle.x}
+          y={rectangle.y}
+          onDrag={(e) => onDragStart(rectangle.id, e)}
         >
           {/* You can add a button or any content here */}
-        </div>
-      ))}
+        </LogicElement>
+      )}
+      <Toolbar createLogicStep={createLogicStep} createActionStep={createActionStep} />
     </div>
   );
 };
 
-export default DraggableRectangle;
+export default BranchPage;

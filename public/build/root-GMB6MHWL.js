@@ -18,7 +18,7 @@ import {
 } from "/build/_shared/chunk-PNG5AS42.js";
 
 // styles/app.css
-var app_default = "/build/_assets/app-L346MXYA.css";
+var app_default = "/build/_assets/app-VR2G7VHX.css";
 
 // app/root.tsx
 var import_jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
@@ -67,7 +67,7 @@ function App() {
       lineNumber: 29,
       columnNumber: 9
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("body", { children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("body", { className: "h-screen w-full", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Outlet, {}, void 0, false, {
         fileName: "app/root.tsx",
         lineNumber: 36,
@@ -103,4 +103,4 @@ export {
   App as default,
   links
 };
-//# sourceMappingURL=/build/root-DXKUVLO4.js.map
+//# sourceMappingURL=/build/root-GMB6MHWL.js.map

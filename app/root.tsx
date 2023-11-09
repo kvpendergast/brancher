@@ -25,7 +25,7 @@ import { LinksFunction } from '@remix-run/node';
           <Meta />
           <Links />
         </head>
-        <body>
+        <body className='h-screen w-full'>
           <Outlet />
       
           <Scripts />
