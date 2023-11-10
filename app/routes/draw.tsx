@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, createContext, useContext } from 'react';
 import LogicElement from '../components/LogicElement';
 import Toolbar from '../components/Toolbar';
+import { ArrowsContext } from '../providers/ArrowsProvider';
+import ConnectorLine from '../components/ConnectorLine';
 
 const BranchPage = () => {
   const [rectangles, setRectangles] = useState([
     { id: 1, x: 50, y: 50 },
-    { id: 2, x: 300, y: 150 },
   ]);
+
+  const { arrows, setArrows } = useContext(ArrowsContext)
 
   const refs = useRef({})
   
   const [dragStart, setDragStart] = useState({ id: null, x: 0, y: 0 });
 
   function createLogicStep() {
-    console.log("wut ")
     setRectangles([...rectangles, {
       id: rectangles.length + 1,
       x: 50,
@@ -83,57 +85,45 @@ const BranchPage = () => {
     });
   }, [rectangles])
 
-  const getCenter = (rect) => ({
-    x: rect.x,
-    y: rect.y,
-  });
-
-  // Calculate line coordinates based on rectangles' centers
-  const lineCoords = {
-    x1: getCenter(rectangles[0]).x,
-    y1: getCenter(rectangles[0]).y,
-    x2: getCenter(rectangles[1]).x,
-    y2: getCenter(rectangles[1]).y,
-  };
-
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        position: 'relative',
-        border: '1px solid black',
-        overflow: 'hidden', // Prevents scrollbars from appearing during drag
-      }}
-    >
-      <svg style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}>
-        <line
-          x1={lineCoords.x1}
-          y1={lineCoords.y1}
-          x2={lineCoords.x2}
-          y2={lineCoords.y2}
-          stroke="black"
-          strokeWidth="2"
-        />
-      </svg>
-      {rectangles.map((rectangle) => <LogicElement
-          key={rectangle.id}
-          ref={(el) => {
-            console.log('bruh')
-            if (el && !refs.current[rectangle.id]) {
-              console.log('yo what we settin')
-              refs.current[rectangle.id] = el;
-            }
-          }}
-          x={rectangle.x}
-          y={rectangle.y}
-          onDrag={(e) => onDragStart(rectangle.id, e)}
-        >
-          {/* You can add a button or any content here */}
-        </LogicElement>
-      )}
-      <Toolbar createLogicStep={createLogicStep} createActionStep={createActionStep} />
-    </div>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+          border: '1px solid black',
+          overflow: 'hidden', // Prevents scrollbars from appearing during drag
+        }}
+      >
+        {rectangles.map((rectangle) => 
+          <LogicElement
+            key={rectangle.id}
+            ref={(el) => {
+              console.log('bruh')
+              if (el && !refs.current[rectangle.id]) {
+                console.log('yo what we settin')
+                refs.current[rectangle.id] = el;
+              }
+            }}
+            x={rectangle.x}
+            y={rectangle.y}
+            onDrag={(e) => onDragStart(rectangle.id, e)}
+          >
+            {/* You can add a button or any content here */}
+          </LogicElement>
+        )}
+        <Toolbar createLogicStep={createLogicStep} createActionStep={createActionStep} />
+        {arrows[0] && (
+            <ConnectorLine
+                startX={arrows[0].startX}
+                startY={arrows[0].startY}
+                endX={arrows[0].endX}
+                endY={arrows[0].endY}
+                parentX={rectangles[0].x}
+                parentY={rectangles[0].y}
+            />
+        )}
+      </div>
   );
 };
 

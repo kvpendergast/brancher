@@ -1,13 +1,13 @@
 import {
-  require_jsx_dev_runtime
-} from "/build/_shared/chunk-XU7DNSPJ.js";
-import {
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts
 } from "/build/_shared/chunk-KQLYCBRS.js";
+import {
+  require_jsx_dev_runtime
+} from "/build/_shared/chunk-XU7DNSPJ.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-QXMFETM4.js";
@@ -18,7 +18,7 @@ import {
 } from "/build/_shared/chunk-PNG5AS42.js";
 
 // styles/app.css
-var app_default = "/build/_assets/app-VR2G7VHX.css";
+var app_default = "/build/_assets/app-JE7I56AQ.css";
 
 // app/root.tsx
 var import_jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
@@ -103,4 +103,4 @@ export {
   App as default,
   links
 };
-//# sourceMappingURL=/build/root-GMB6MHWL.js.map
+//# sourceMappingURL=/build/root-CNMB467M.js.map

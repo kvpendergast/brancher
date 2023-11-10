@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ConnectorLine from './ConnectorLine';
+import { ArrowsContext } from '../providers/ArrowsProvider';
 
 const LogicElement = React.forwardRef(({ x, y, onDrag, children }, ref) => {
     const [showConnectors, setShowConnectors] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const [arrowStart, setArrowStart] = useState(null);
-    const [arrowEnd, setArrowEnd] = useState(null);
 
-    console.log('arrow start ', arrowStart)
-    console.log('arrow end ', arrowEnd)
-    console.log('is dragging ', isDragging)
+    const { arrows, setArrows } = useContext(ArrowsContext)
 
     function handleOnMouseEnter() {
         setShowConnectors(true);
@@ -22,18 +19,19 @@ const LogicElement = React.forwardRef(({ x, y, onDrag, children }, ref) => {
     const handleMouseDownOnCircle = (event) => {
         // Prevent the onDrag for the LogicElement from firing
         event.stopPropagation();
-        setArrowStart({ x: event.clientX, y: event.clientY });
+        setArrows([{ ...arrows[0], startX: event.clientX, startY: event.clientY }]);
         setIsDragging(true);
     };
 
     const handleMouseMove = (event) => {
         if (isDragging) {
-            setArrowEnd({ x: event.clientX, y: event.clientY });
+            setArrows([{ ...arrows[0], endX: event.clientX, endY: event.clientY }]);
         }
     };
 
     const handleMouseUp = () => {
         setIsDragging(false);
+        setArrows([])
         // Here you can finalize the arrow's position or clear it if needed
         // For example, if you want to remove the arrow after the drag:
         // setArrowStart(null);
@@ -74,16 +72,6 @@ const LogicElement = React.forwardRef(({ x, y, onDrag, children }, ref) => {
                     <div
                         className='absolute w-8 h-8 rounded-full bg-black -right-10 top-1/2 transform -translate-y-1/2'
                         onMouseDown={handleMouseDownOnCircle}
-                    />
-                )}
-                {isDragging && arrowStart && arrowEnd && (
-                    <ConnectorLine
-                        startX={arrowStart.x}
-                        startY={arrowStart.y}
-                        endX={arrowEnd.x}
-                        endY={arrowEnd.y}
-                        parentX={x}
-                        parentY={y}
                     />
                 )}
             </div>

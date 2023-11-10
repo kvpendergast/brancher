@@ -4,7 +4,6 @@ import {
 import {
   createHotContext
 } from "/build/_shared/chunk-QXMFETM4.js";
-import "/build/_shared/chunk-UWV35TSL.js";
 import {
   require_react
 } from "/build/_shared/chunk-BOXFZXVX.js";
@@ -13,12 +12,13 @@ import {
 } from "/build/_shared/chunk-PNG5AS42.js";
 
 // app/routes/draw.tsx
-var import_react2 = __toESM(require_react(), 1);
+var import_react3 = __toESM(require_react(), 1);
 
 // app/components/LogicElement.tsx
-var import_react = __toESM(require_react(), 1);
+var import_react2 = __toESM(require_react(), 1);
 
-// app/components/ConnectorLine.tsx
+// app/providers/ArrowsProvider.tsx
+var import_react = __toESM(require_react(), 1);
 var import_jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
 if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
   console.warn("remix:hmr: React Fast Refresh only works when the Remix compiler is running in development mode.");
@@ -26,57 +26,39 @@ if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
   prevRefreshReg = window.$RefreshReg$;
   prevRefreshSig = window.$RefreshSig$;
   window.$RefreshReg$ = (type, id) => {
-    window.$RefreshRuntime$.register(type, '"app/components/ConnectorLine.tsx"' + id);
+    window.$RefreshRuntime$.register(type, '"app/providers/ArrowsProvider.tsx"' + id);
   };
   window.$RefreshSig$ = window.$RefreshRuntime$.createSignatureFunctionForTransform;
 }
 var prevRefreshReg;
 var prevRefreshSig;
+var _s = $RefreshSig$();
 if (import.meta) {
   import.meta.hot = createHotContext(
     //@ts-expect-error
-    "app/components/ConnectorLine.tsx"
+    "app/providers/ArrowsProvider.tsx"
   );
-  import.meta.hot.lastModified = "1699499042551.861";
+  import.meta.hot.lastModified = "1699582295153.4924";
 }
-function ConnectorLine({
-  startX,
-  startY,
-  endX,
-  endY,
-  parentX,
-  parentY
-}) {
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("svg", { className: "absolute top-0 left-0 w-full h-full", style: {
-    pointerEvents: "none"
-  }, children: [
-    /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("line", { x1: startX - parentX, y1: startY - parentY, x2: endX - parentX, y2: endY - parentY, stroke: "black", strokeWidth: "2", markerEnd: "url(#arrowhead)" }, void 0, false, {
-      fileName: "app/components/ConnectorLine.tsx",
-      lineNumber: 33,
-      columnNumber: 13
-    }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("defs", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("marker", { id: "arrowhead", markerWidth: "10", markerHeight: "7", refX: "0", refY: "3.5", orient: "auto", markerUnits: "strokeWidth", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("polygon", { points: "0 0, 10 3.5, 0 7" }, void 0, false, {
-      fileName: "app/components/ConnectorLine.tsx",
-      lineNumber: 36,
-      columnNumber: 21
-    }, this) }, void 0, false, {
-      fileName: "app/components/ConnectorLine.tsx",
-      lineNumber: 35,
-      columnNumber: 17
-    }, this) }, void 0, false, {
-      fileName: "app/components/ConnectorLine.tsx",
-      lineNumber: 34,
-      columnNumber: 13
-    }, this)
-  ] }, void 0, true, {
-    fileName: "app/components/ConnectorLine.tsx",
-    lineNumber: 30,
+var ArrowsContext = (0, import_react.createContext)();
+var ArrowsProvider = ({
+  children
+}) => {
+  _s();
+  const [arrows, setArrows] = (0, import_react.useState)([]);
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ArrowsContext.Provider, { value: {
+    arrows,
+    setArrows
+  }, children }, void 0, false, {
+    fileName: "app/providers/ArrowsProvider.tsx",
+    lineNumber: 29,
     columnNumber: 10
   }, this);
-}
-_c = ConnectorLine;
+};
+_s(ArrowsProvider, "+F5MWakBHQ7ZDUj3DMjgRGi/m64=");
+_c = ArrowsProvider;
 var _c;
-$RefreshReg$(_c, "ConnectorLine");
+$RefreshReg$(_c, "ArrowsProvider");
 window.$RefreshReg$ = prevRefreshReg;
 window.$RefreshSig$ = prevRefreshSig;
 
@@ -94,28 +76,27 @@ if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
 }
 var prevRefreshReg;
 var prevRefreshSig;
-var _s = $RefreshSig$();
+var _s2 = $RefreshSig$();
 if (import.meta) {
   import.meta.hot = createHotContext(
     //@ts-expect-error
     "app/components/LogicElement.tsx"
   );
-  import.meta.hot.lastModified = "1699499103562.4133";
+  import.meta.hot.lastModified = "1699583942724.5195";
 }
-var LogicElement = _s(import_react.default.forwardRef(_c2 = _s(({
+var LogicElement = _s2(import_react2.default.forwardRef(_c2 = _s2(({
   x,
   y,
   onDrag,
   children
 }, ref) => {
-  _s();
-  const [showConnectors, setShowConnectors] = (0, import_react.useState)(false);
-  const [isDragging, setIsDragging] = (0, import_react.useState)(false);
-  const [arrowStart, setArrowStart] = (0, import_react.useState)(null);
-  const [arrowEnd, setArrowEnd] = (0, import_react.useState)(null);
-  console.log("arrow start ", arrowStart);
-  console.log("arrow end ", arrowEnd);
-  console.log("is dragging ", isDragging);
+  _s2();
+  const [showConnectors, setShowConnectors] = (0, import_react2.useState)(false);
+  const [isDragging, setIsDragging] = (0, import_react2.useState)(false);
+  const {
+    arrows,
+    setArrows
+  } = (0, import_react2.useContext)(ArrowsContext);
   function handleOnMouseEnter() {
     setShowConnectors(true);
   }
@@ -124,24 +105,27 @@ var LogicElement = _s(import_react.default.forwardRef(_c2 = _s(({
   }
   const handleMouseDownOnCircle = (event) => {
     event.stopPropagation();
-    setArrowStart({
-      x: event.clientX,
-      y: event.clientY
-    });
+    setArrows([{
+      ...arrows[0],
+      startX: event.clientX,
+      startY: event.clientY
+    }]);
     setIsDragging(true);
   };
   const handleMouseMove = (event) => {
     if (isDragging) {
-      setArrowEnd({
-        x: event.clientX,
-        y: event.clientY
-      });
+      setArrows([{
+        ...arrows[0],
+        endX: event.clientX,
+        endY: event.clientY
+      }]);
     }
   };
   const handleMouseUp = () => {
     setIsDragging(false);
+    setArrows([]);
   };
-  (0, import_react.useEffect)(() => {
+  (0, import_react2.useEffect)(() => {
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
@@ -166,13 +150,8 @@ var LogicElement = _s(import_react.default.forwardRef(_c2 = _s(({
         children,
         showConnectors && /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "absolute w-8 h-8 rounded-full bg-black -right-10 top-1/2 transform -translate-y-1/2", onMouseDown: handleMouseDownOnCircle }, void 0, false, {
           fileName: "app/components/LogicElement.tsx",
-          lineNumber: 89,
+          lineNumber: 91,
           columnNumber: 36
-        }, this),
-        isDragging && arrowStart && arrowEnd && /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(ConnectorLine, { startX: arrowStart.x, startY: arrowStart.y, endX: arrowEnd.x, endY: arrowEnd.y, parentX: x, parentY: y }, void 0, false, {
-          fileName: "app/components/LogicElement.tsx",
-          lineNumber: 90,
-          columnNumber: 58
         }, this)
       ]
     },
@@ -180,16 +159,16 @@ var LogicElement = _s(import_react.default.forwardRef(_c2 = _s(({
     true,
     {
       fileName: "app/components/LogicElement.tsx",
-      lineNumber: 85,
+      lineNumber: 87,
       columnNumber: 13
     },
     this
   ) }, void 0, false, {
     fileName: "app/components/LogicElement.tsx",
-    lineNumber: 80,
+    lineNumber: 82,
     columnNumber: 10
   }, this);
-}, "gjp+5am2B5HM0bP4VHxOFNVIhdU=")), "gjp+5am2B5HM0bP4VHxOFNVIhdU=");
+}, "Zx/vKOczJlMMiB7uOnPnolqjK3g=")), "Zx/vKOczJlMMiB7uOnPnolqjK3g=");
 _c22 = LogicElement;
 var LogicElement_default = LogicElement;
 var _c2;
@@ -284,8 +263,70 @@ $RefreshReg$(_c4, "Toolbar");
 window.$RefreshReg$ = prevRefreshReg;
 window.$RefreshSig$ = prevRefreshSig;
 
-// app/routes/draw.tsx
+// app/components/ConnectorLine.tsx
 var import_jsx_dev_runtime5 = __toESM(require_jsx_dev_runtime(), 1);
+if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
+  console.warn("remix:hmr: React Fast Refresh only works when the Remix compiler is running in development mode.");
+} else {
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = (type, id) => {
+    window.$RefreshRuntime$.register(type, '"app/components/ConnectorLine.tsx"' + id);
+  };
+  window.$RefreshSig$ = window.$RefreshRuntime$.createSignatureFunctionForTransform;
+}
+var prevRefreshReg;
+var prevRefreshSig;
+if (import.meta) {
+  import.meta.hot = createHotContext(
+    //@ts-expect-error
+    "app/components/ConnectorLine.tsx"
+  );
+  import.meta.hot.lastModified = "1699499042551.861";
+}
+function ConnectorLine({
+  startX,
+  startY,
+  endX,
+  endY,
+  parentX,
+  parentY
+}) {
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("svg", { className: "absolute top-0 left-0 w-full h-full", style: {
+    pointerEvents: "none"
+  }, children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("line", { x1: startX - parentX, y1: startY - parentY, x2: endX - parentX, y2: endY - parentY, stroke: "black", strokeWidth: "2", markerEnd: "url(#arrowhead)" }, void 0, false, {
+      fileName: "app/components/ConnectorLine.tsx",
+      lineNumber: 33,
+      columnNumber: 13
+    }, this),
+    /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("defs", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("marker", { id: "arrowhead", markerWidth: "10", markerHeight: "7", refX: "0", refY: "3.5", orient: "auto", markerUnits: "strokeWidth", children: /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("polygon", { points: "0 0, 10 3.5, 0 7" }, void 0, false, {
+      fileName: "app/components/ConnectorLine.tsx",
+      lineNumber: 36,
+      columnNumber: 21
+    }, this) }, void 0, false, {
+      fileName: "app/components/ConnectorLine.tsx",
+      lineNumber: 35,
+      columnNumber: 17
+    }, this) }, void 0, false, {
+      fileName: "app/components/ConnectorLine.tsx",
+      lineNumber: 34,
+      columnNumber: 13
+    }, this)
+  ] }, void 0, true, {
+    fileName: "app/components/ConnectorLine.tsx",
+    lineNumber: 30,
+    columnNumber: 10
+  }, this);
+}
+_c5 = ConnectorLine;
+var _c5;
+$RefreshReg$(_c5, "ConnectorLine");
+window.$RefreshReg$ = prevRefreshReg;
+window.$RefreshSig$ = prevRefreshSig;
+
+// app/routes/draw.tsx
+var import_jsx_dev_runtime6 = __toESM(require_jsx_dev_runtime(), 1);
 if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
   console.warn("remix:hmr: React Fast Refresh only works when the Remix compiler is running in development mode.");
 } else {
@@ -298,33 +339,32 @@ if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
 }
 var prevRefreshReg;
 var prevRefreshSig;
-var _s2 = $RefreshSig$();
+var _s3 = $RefreshSig$();
 if (import.meta) {
   import.meta.hot = createHotContext(
     //@ts-expect-error
     "app/routes/draw.tsx"
   );
-  import.meta.hot.lastModified = "1699496746752.2944";
+  import.meta.hot.lastModified = "1699584101457.9446";
 }
 var BranchPage = () => {
-  _s2();
-  const [rectangles, setRectangles] = (0, import_react2.useState)([{
+  _s3();
+  const [rectangles, setRectangles] = (0, import_react3.useState)([{
     id: 1,
     x: 50,
     y: 50
-  }, {
-    id: 2,
-    x: 300,
-    y: 150
   }]);
-  const refs = (0, import_react2.useRef)({});
-  const [dragStart, setDragStart] = (0, import_react2.useState)({
+  const {
+    arrows,
+    setArrows
+  } = (0, import_react3.useContext)(ArrowsContext);
+  const refs = (0, import_react3.useRef)({});
+  const [dragStart, setDragStart] = (0, import_react3.useState)({
     id: null,
     x: 0,
     y: 0
   });
   function createLogicStep() {
-    console.log("wut ");
     setRectangles([...rectangles, {
       id: rectangles.length + 1,
       x: 50,
@@ -368,7 +408,7 @@ var BranchPage = () => {
       y: 0
     });
   };
-  (0, import_react2.useEffect)(() => {
+  (0, import_react3.useEffect)(() => {
     if (dragStart.id !== null) {
       document.addEventListener("mousemove", onDrag);
       document.addEventListener("mouseup", onDragEnd);
@@ -378,7 +418,7 @@ var BranchPage = () => {
       document.removeEventListener("mouseup", onDragEnd);
     };
   }, [dragStart, rectangles]);
-  (0, import_react2.useEffect)(() => {
+  (0, import_react3.useEffect)(() => {
     Object.keys(refs.current).forEach((key) => {
       if (refs.current[key]) {
         const dimensions = refs.current[key].getBoundingClientRect();
@@ -386,17 +426,7 @@ var BranchPage = () => {
       }
     });
   }, [rectangles]);
-  const getCenter = (rect) => ({
-    x: rect.x,
-    y: rect.y
-  });
-  const lineCoords = {
-    x1: getCenter(rectangles[0]).x,
-    y1: getCenter(rectangles[0]).y,
-    x2: getCenter(rectangles[1]).x,
-    y2: getCenter(rectangles[1]).y
-  };
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("div", { style: {
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime6.jsxDEV)("div", { style: {
     width: "100%",
     height: "100%",
     position: "relative",
@@ -404,23 +434,7 @@ var BranchPage = () => {
     overflow: "hidden"
     // Prevents scrollbars from appearing during drag
   }, children: [
-    /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("svg", { style: {
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      top: 0,
-      left: 0,
-      pointerEvents: "none"
-    }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("line", { x1: lineCoords.x1, y1: lineCoords.y1, x2: lineCoords.x2, y2: lineCoords.y2, stroke: "black", strokeWidth: "2" }, void 0, false, {
-      fileName: "app/routes/draw.tsx",
-      lineNumber: 132,
-      columnNumber: 9
-    }, this) }, void 0, false, {
-      fileName: "app/routes/draw.tsx",
-      lineNumber: 124,
-      columnNumber: 7
-    }, this),
-    rectangles.map((rectangle) => /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)(LogicElement_default, { ref: (el) => {
+    rectangles.map((rectangle) => /* @__PURE__ */ (0, import_jsx_dev_runtime6.jsxDEV)(LogicElement_default, { ref: (el) => {
       console.log("bruh");
       if (el && !refs.current[rectangle.id]) {
         console.log("yo what we settin");
@@ -428,28 +442,35 @@ var BranchPage = () => {
       }
     }, x: rectangle.x, y: rectangle.y, onDrag: (e) => onDragStart(rectangle.id, e) }, rectangle.id, false, {
       fileName: "app/routes/draw.tsx",
-      lineNumber: 134,
-      columnNumber: 36
+      lineNumber: 113,
+      columnNumber: 38
     }, this)),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)(Toolbar, { createLogicStep, createActionStep }, void 0, false, {
+    /* @__PURE__ */ (0, import_jsx_dev_runtime6.jsxDEV)(Toolbar, { createLogicStep, createActionStep }, void 0, false, {
       fileName: "app/routes/draw.tsx",
-      lineNumber: 143,
-      columnNumber: 7
+      lineNumber: 122,
+      columnNumber: 9
+    }, this),
+    arrows[0] && /* @__PURE__ */ (0, import_jsx_dev_runtime6.jsxDEV)(ConnectorLine, { startX: arrows[0].startX, startY: arrows[0].startY, endX: arrows[0].endX, endY: arrows[0].endY, parentX: rectangles[0].x, parentY: rectangles[0].y }, void 0, false, {
+      fileName: "app/routes/draw.tsx",
+      lineNumber: 123,
+      columnNumber: 23
     }, this)
   ] }, void 0, true, {
     fileName: "app/routes/draw.tsx",
-    lineNumber: 117,
+    lineNumber: 106,
     columnNumber: 10
   }, this);
 };
-_s2(BranchPage, "tl7/Bm5Mqp8Zr+aQulidRgl8gIs=");
-_c5 = BranchPage;
+_s3(BranchPage, "6kNxdsgxK1NF+k5cznKfwufbE+8=");
+_c6 = BranchPage;
 var draw_default = BranchPage;
-var _c5;
-$RefreshReg$(_c5, "BranchPage");
+var _c6;
+$RefreshReg$(_c6, "BranchPage");
 window.$RefreshReg$ = prevRefreshReg;
 window.$RefreshSig$ = prevRefreshSig;
+
 export {
-  draw_default as default
+  ArrowsProvider,
+  draw_default
 };
-//# sourceMappingURL=/build/routes/draw-TFJCOSC6.js.map
+//# sourceMappingURL=/build/_shared/chunk-5KN45BGA.js.map
