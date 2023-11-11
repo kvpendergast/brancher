@@ -76,15 +76,6 @@ const BranchPage = () => {
     };
   }, [dragStart, rectangles]);
 
-  useEffect(() => {
-    Object.keys(refs.current).forEach(key => {
-      if (refs.current[key]) {
-        const dimensions = refs.current[key].getBoundingClientRect();
-        console.log(`Dimensions for rectangle ${key}:`, dimensions);
-      }
-    });
-  }, [rectangles])
-
   return (
       <div
         style={{
@@ -99,9 +90,7 @@ const BranchPage = () => {
           <LogicElement
             key={rectangle.id}
             ref={(el) => {
-              console.log('bruh')
               if (el && !refs.current[rectangle.id]) {
-                console.log('yo what we settin')
                 refs.current[rectangle.id] = el;
               }
             }}
@@ -113,16 +102,13 @@ const BranchPage = () => {
           </LogicElement>
         )}
         <Toolbar createLogicStep={createLogicStep} createActionStep={createActionStep} />
-        {arrows[0] && (
-            <ConnectorLine
-                startX={arrows[0].startX}
-                startY={arrows[0].startY}
-                endX={arrows[0].endX}
-                endY={arrows[0].endY}
-                parentX={rectangles[0].x}
-                parentY={rectangles[0].y}
-            />
-        )}
+        {arrows.map((a) => <ConnectorLine
+          key={a.id}
+          startX={a.startX}
+          startY={a.startY}
+          endX={a.endX}
+          endY={a.endY}
+        />)}
       </div>
   );
 };

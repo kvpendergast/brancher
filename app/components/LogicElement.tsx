@@ -16,26 +16,42 @@ const LogicElement = React.forwardRef(({ x, y, onDrag, children }, ref) => {
         setShowConnectors(false);
     }
 
+    console.log('arrows ', arrows)
+
     const handleMouseDownOnCircle = (event) => {
         // Prevent the onDrag for the LogicElement from firing
         event.stopPropagation();
-        setArrows([{ ...arrows[0], startX: event.clientX, startY: event.clientY }]);
+        setArrows([...arrows, { 
+            id: arrows.length + 1,
+            startX: event.clientX,
+            endX: event.clientX,
+            endY: event.clientY,
+            startY: event.clientY,
+            dragging: true
+        }]);
         setIsDragging(true);
     };
 
     const handleMouseMove = (event) => {
         if (isDragging) {
-            setArrows([{ ...arrows[0], endX: event.clientX, endY: event.clientY }]);
+            const draggingArrow = arrows.find((a) => a.dragging)
+            setArrows([...arrows.filter((a) => !a.dragging), {
+                ...draggingArrow,
+                endX: event.clientX,
+                endY: event.clientY
+            }]);
         }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (event) => {
         setIsDragging(false);
-        setArrows([])
-        // Here you can finalize the arrow's position or clear it if needed
-        // For example, if you want to remove the arrow after the drag:
-        // setArrowStart(null);
-        // setArrowEnd(null);
+        const draggingArrow = arrows.find((a) => a.dragging)
+        setArrows([...arrows.filter((a) => !a.dragging), {
+            ...draggingArrow,
+            endX: event.clientX,
+            endY: event.clientY,
+            dragging: false
+        }])
     };
 
     // Listeners for the document to track mouse move and up events

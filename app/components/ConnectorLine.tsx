@@ -1,16 +1,16 @@
 import React from 'react'
 
-export default function ConnectorLine ({ startX, startY, endX, endY, parentX, parentY }) {
+export default function ConnectorLine ({ startX, startY, endX, endY }) {
     return (
         <svg
             className='absolute top-0 left-0 w-full h-full'
             style={{ pointerEvents: 'none' }}
         >
             <line
-                x1={startX - parentX}
-                y1={startY - parentY}
-                x2={endX - parentX}
-                y2={endY - parentY}
+                x1={startX}
+                y1={startY}
+                x2={endX}
+                y2={endY}
                 stroke="black"
                 strokeWidth="2"
                 markerEnd="url(#arrowhead)"
