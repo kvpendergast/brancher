@@ -31,8 +31,8 @@ const BranchPage = () => {
     const rect = rectangles.find(r => r.id === id);
     setDragStart({
       id,
-      x: e.clientX - rect.x,
-      y: e.clientY - rect.y,
+      x: e.clientX,
+      y: e.clientY,
     });
     setRectangles(rects =>
       rects.map(rect =>
@@ -41,17 +41,32 @@ const BranchPage = () => {
     );
   };
 
+  function handleArrowsUpdate(parentId, diffX, diffY) {
+    setArrows(arrows.map((a) => a.parentId === parentId ? {
+      ...a, startX: a.startX + diffX, startY: a.startY + diffY
+    } : a))
+  }
+
   const onDrag = (e) => {
     if (dragStart.id !== null) {
-      const newX = e.clientX - dragStart.x;
-      const newY = e.clientY - dragStart.y;
+      const diffX = e.clientX - dragStart.x;
+      const diffY = e.clientY - dragStart.y;
+      
       setRectangles(rects =>
         rects.map(rect =>
           rect.id === dragStart.id
-            ? { ...rect, x: newX, y: newY }
+            ? { ...rect, x: rect.x + diffX, y: rect.y + diffY }
             : rect
         ),
       );
+
+      handleArrowsUpdate (dragStart.id, diffX, diffY)
+
+      setDragStart({
+        ...dragStart,
+        x: e.clientX,
+        y: e.clientY,
+      });
     }
   };
 
@@ -88,6 +103,7 @@ const BranchPage = () => {
       >
         {rectangles.map((rectangle) => 
           <LogicElement
+            id={rectangle.id}
             key={rectangle.id}
             ref={(el) => {
               if (el && !refs.current[rectangle.id]) {
@@ -104,6 +120,7 @@ const BranchPage = () => {
         <Toolbar createLogicStep={createLogicStep} createActionStep={createActionStep} />
         {arrows.map((a) => <ConnectorLine
           key={a.id}
+          startNode={a.startNode}
           startX={a.startX}
           startY={a.startY}
           endX={a.endX}

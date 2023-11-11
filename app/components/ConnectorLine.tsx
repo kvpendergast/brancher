@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import _ from 'lodash'
 
 export default function ConnectorLine ({ startX, startY, endX, endY }) {
+
     return (
         <svg
             className='absolute top-0 left-0 w-full h-full'

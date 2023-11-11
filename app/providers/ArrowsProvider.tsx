@@ -4,8 +4,9 @@ export const ArrowsContext = createContext([])
 
 export const ArrowsProvider = ({ children }) => {
     const [arrows, setArrows] = useState([])
+    const [nodes, setNodes] = useState([])
     return (
-        <ArrowsContext.Provider value={{ arrows, setArrows }}>
+        <ArrowsContext.Provider value={{ arrows, setArrows, nodes, setNodes }}>
             { children }
         </ArrowsContext.Provider>
     )
