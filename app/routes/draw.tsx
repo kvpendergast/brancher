@@ -119,8 +119,8 @@ const BranchPage = () => {
         )}
         <Toolbar createLogicStep={createLogicStep} createActionStep={createActionStep} />
         {arrows.map((a) => <ConnectorLine
+          id={a.id}
           key={a.id}
-          startNode={a.startNode}
           startX={a.startX}
           startY={a.startY}
           endX={a.endX}
