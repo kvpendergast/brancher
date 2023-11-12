@@ -46,6 +46,17 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }) {
 
     }, [isDragging])
 
+    const isEndBelowStart = endY > startY;
+    
+    // Define the path 'd' attribute
+    let d = `M${startX} ${startY} L${endX - 5} ${startY}`; // Move to start point
+
+    if (isEndBelowStart) {
+        d += `S${endX} ${startY} ${endX} ${startY + 5} L${endX} ${endY}`
+    } else {
+        d += `S${endX} ${startY} ${endX} ${startY - 5} L${endX} ${endY}`
+    }
+
     return (
         <svg className='absolute top-0 left-0 w-full h-full' style={{ pointerEvents: 'none' }}>
             <defs>
@@ -61,13 +72,11 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }) {
                     <polygon points="0 0, 10 3.5, 0 7" />
                 </marker>
             </defs>
-            <line
-                x1={startX}
-                y1={startY}
-                x2={endX}
-                y2={endY}
+            <path
+                d={d}
                 stroke="black"
                 strokeWidth="2"
+                fill="none"
                 markerEnd="url(#arrowhead)"
             />
             {/* Transparent circle to capture click events */}
