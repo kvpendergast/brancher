@@ -6,20 +6,31 @@ import ConnectorLine from '../components/ConnectorLine';
 
 const BranchPage = () => {
   const [rectangles, setRectangles] = useState([
-    { id: 1, x: 50, y: 50 },
+    { id: 1, x: 50, y: 50, dragging: false },
   ]);
 
   const { arrows, setArrows } = useContext(ArrowsContext)
 
-  const refs = useRef({})
+  type RefsType = {
+    [key in number]: HTMLElement | null;
+  };
+
+  const refs = useRef<RefsType>({})
+
+  interface DragStartType {
+    id: number | null,
+    x: number, 
+    y: number
+  }
   
-  const [dragStart, setDragStart] = useState({ id: null, x: 0, y: 0 });
+  const [dragStart, setDragStart] = useState<DragStartType>({ id: null, x: 0, y: 0 });
 
   function createLogicStep() {
     setRectangles([...rectangles, {
       id: rectangles.length + 1,
       x: 50,
-      y: 50
+      y: 50,
+      dragging: false
     }])
   }
 
@@ -27,8 +38,7 @@ const BranchPage = () => {
     console.log('creating...')
   }
 
-  const onDragStart = (id, e) => {
-    const rect = rectangles.find(r => r.id === id);
+  const onDragStart = (id: number, e: React.MouseEvent<HTMLDivElement>) => {
     setDragStart({
       id,
       x: e.clientX,
@@ -41,13 +51,13 @@ const BranchPage = () => {
     );
   };
 
-  function handleArrowsUpdate(parentId, diffX, diffY) {
+  function handleArrowsUpdate(parentId: number, diffX: number, diffY: number) {
     setArrows(arrows.map((a) => a.parentId === parentId ? {
       ...a, startX: a.startX + diffX, startY: a.startY + diffY
     } : a))
   }
 
-  const onDrag = (e) => {
+  const onDrag = (e: MouseEvent) => {
     if (dragStart.id !== null) {
       const diffX = e.clientX - dragStart.x;
       const diffY = e.clientY - dragStart.y;
@@ -112,7 +122,7 @@ const BranchPage = () => {
             }}
             x={rectangle.x}
             y={rectangle.y}
-            onDrag={(e) => onDragStart(rectangle.id, e)}
+            onDrag={onDragStart}
           >
             {/* You can add a button or any content here */}
           </LogicElement>

@@ -2,7 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import _ from 'lodash'
 import { ArrowsContext } from '../providers/ArrowsProvider';
 
-export default function ConnectorLine ({ id, startX, startY, endX, endY }) {
+interface ConnectorLineType {
+    id: number,
+    startX: number,
+    startY: number,
+    endX: number,
+    endY: number
+}
+
+export default function ConnectorLine ({ id, startX, startY, endX, endY }: ConnectorLineType) {
     const [isDragging, setIsDragging] = useState(false)
 
     const { arrows, setArrows } = useContext(ArrowsContext)
@@ -12,7 +20,7 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }) {
         setIsDragging(true)
     };
 
-    const onMouseMove = (event) => {
+    const onMouseMove = (event: MouseEvent) => {
         if (isDragging) {
             setArrows(arrows.map((a) => a.id === id ?
             { 
@@ -23,7 +31,7 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }) {
         }
     }
 
-    const onMouseUp = (event) => {
+    const onMouseUp = (event: MouseEvent) => {
         setIsDragging(false)
         setArrows(arrows.map((a) => a.id === id ?
             { 
@@ -47,9 +55,15 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }) {
     }, [isDragging])
 
     const isEndBelowStart = endY > startY;
+    const isEndXBeforeStartX = endX < startX;
     
     // Define the path 'd' attribute
     let d = `M${startX} ${startY} L${endX - 5} ${startY}`; // Move to start point
+
+    if (isEndXBeforeStartX) {
+        console.log('end x before start x ', endX, startX)
+      d = `M${startX} ${startY} L${endX + 5} ${startY}`
+    }
 
     if (isEndBelowStart) {
         d += `S${endX} ${startY} ${endX} ${startY + 5} L${endX} ${endY}`

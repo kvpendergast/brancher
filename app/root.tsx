@@ -1,7 +1,8 @@
 import React from 'react'
-import stylesheet from "../styles/app.css";
+import stylesheet from '../styles/app.css';
 
 export const links: LinksFunction = () => [
+  // @ts-ignore
   { rel: "stylesheet", href: stylesheet },
 ];
 

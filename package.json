@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "remix dev -c \"node server.mjs\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -20,10 +21,12 @@
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "reactflow": "^11.9.4"
+    "reactflow": "^11.9.4",
+    "typescript": "^5.2.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.2.0",
+    "@types/lodash": "^4.14.201",
     "tailwindcss": "^3.3.5"
   }
 }

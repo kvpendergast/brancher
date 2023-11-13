@@ -1,19 +1,33 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import ConnectorLine from './ConnectorLine';
-import { ArrowsContext } from '../providers/ArrowsProvider';
+import React, { ReactNode, forwardRef, useContext, useEffect, useRef, useState } from 'react';
+import { Arrow, ArrowsContext } from '../providers/ArrowsProvider';
 
-const LogicElement = React.forwardRef(({ id, x, y, onDrag, children }, ref) => {
-    const [showConnectors, setShowConnectors] = useState(false);
+interface LogicElementProps {
+    id: number;
+    x: number;
+    y: number;
+    onDrag: (id: number, e: React.MouseEvent<HTMLDivElement>) => void;
+    children: ReactNode;
+}
+
+enum NodeRefKeys {
+    Left = 'left',
+    Right = 'right',
+    Bottom = 'bottom',
+    Top = 'top'
+}
+  
+// Define the type for the refs object
+type NodeRefs = {
+    [key in NodeRefKeys]?: HTMLElement | null;
+};
+
+const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, onDrag, children }, ref) => {
     const [isDragging, setIsDragging] = useState(false);
-    const nodeRefs = useRef({})
+    const nodeRefs = useRef<NodeRefs>({})
 
     const { arrows, setArrows } = useContext(ArrowsContext)
 
-    function handleOnMouseEnter() {
-        setShowConnectors(true);
-    }
-
-    const handleMouseDownOnCircle = (event) => {
+    const handleMouseDownOnCircle = (event: React.MouseEvent<HTMLDivElement>) => {
         // Prevent the onDrag for the LogicElement from firing
         event.stopPropagation();
 
@@ -29,9 +43,10 @@ const LogicElement = React.forwardRef(({ id, x, y, onDrag, children }, ref) => {
         setIsDragging(true);
     };
 
-    const handleMouseMove = (event) => {
+    const handleMouseMove = (event: MouseEvent) => {
         if (isDragging) {
-            const draggingArrow = arrows.find((a) => a.dragging)
+            const draggingArrow: Arrow | undefined = arrows.find((a) => a.dragging)
+            if (!draggingArrow) return
             setArrows([...arrows.filter((a) => !a.dragging), {
                 ...draggingArrow,
                 endX: event.clientX,
@@ -40,9 +55,10 @@ const LogicElement = React.forwardRef(({ id, x, y, onDrag, children }, ref) => {
         }
     };
 
-    const handleMouseUp = (event) => {
+    const handleMouseUp = (event: MouseEvent) => {
         setIsDragging(false);
-        const draggingArrow = arrows.find((a) => a.dragging)
+        const draggingArrow: Arrow | undefined = arrows.find((a) => a.dragging)
+        if (!draggingArrow) return
         setArrows([...arrows.filter((a) => !a.dragging), {
             ...draggingArrow,
             endX: event.clientX,
@@ -50,6 +66,10 @@ const LogicElement = React.forwardRef(({ id, x, y, onDrag, children }, ref) => {
             dragging: false
         }])
     };
+
+    function handleOnDrag (e: React.MouseEvent<HTMLDivElement>) {
+        onDrag(id, e)
+    }
 
     // Listeners for the document to track mouse move and up events
     useEffect(() => {
@@ -76,8 +96,7 @@ const LogicElement = React.forwardRef(({ id, x, y, onDrag, children }, ref) => {
             <div
                 ref={ref}
                 className='w-[200px] h-[200px] bg-red-400 relative'
-                onMouseEnter={handleOnMouseEnter}
-                onMouseDown={onDrag}
+                onMouseDown={handleOnDrag}
             >
                 {children}
                 <div
