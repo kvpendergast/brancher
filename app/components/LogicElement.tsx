@@ -9,23 +9,10 @@ interface LogicElementProps {
     children: ReactNode;
 }
 
-enum NodeRefKeys {
-    Left = 'left',
-    Right = 'right',
-    Bottom = 'bottom',
-    Top = 'top'
-}
-  
-// Define the type for the refs object
-type NodeRefs = {
-    [key in NodeRefKeys]?: HTMLElement | null;
-};
-
 const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, onDrag, children }, ref) => {
     const [isDragging, setIsDragging] = useState(false);
-    const nodeRefs = useRef<NodeRefs>({})
 
-    const { arrows, setArrows } = useContext(ArrowsContext)
+    const { arrows, setArrows, nodes: nodeRefs } = useContext(ArrowsContext)
 
     const handleMouseDownOnCircle = (event: React.MouseEvent<HTMLDivElement>) => {
         // Prevent the onDrag for the LogicElement from firing
