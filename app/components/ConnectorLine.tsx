@@ -13,7 +13,7 @@ interface ConnectorLineType {
 export default function ConnectorLine ({ id, startX, startY, endX, endY }: ConnectorLineType) {
     const [isDragging, setIsDragging] = useState(false)
 
-    const { arrows, setArrows } = useContext(ArrowsContext)
+    const { arrows, setArrows, checkOverlap } = useContext(ArrowsContext)
 
     // Function to handle the click event
     const onMouseDown = () => {
@@ -22,23 +22,16 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }: Conne
 
     const onMouseMove = (event: MouseEvent) => {
         if (isDragging) {
-            setArrows(arrows.map((a) => a.id === id ?
-            { 
-                ...a, endX: event.clientX, endY: event.clientY 
-            }
-            : 
-            a))
+            const draggingArrow = arrows.find((a) => a.id === id)
+            if (!draggingArrow) return
+            checkOverlap(draggingArrow?.parentId, draggingArrow.id, event.clientX, event.clientY)
         }
     }
 
     const onMouseUp = (event: MouseEvent) => {
         setIsDragging(false)
-        setArrows(arrows.map((a) => a.id === id ?
-            { 
-                ...a, endX: event.clientX, endY: event.clientY 
-            }
-            : 
-            a))
+        const draggingArrow = arrows.find((a) => a.id === id)
+        checkOverlap(draggingArrow?.parentId, draggingArrow.id, event.clientX, event.clientY)
     }
 
     useEffect(() => {
@@ -61,7 +54,6 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }: Conne
     let d = `M${startX} ${startY} L${endX - 5} ${startY}`; // Move to start point
 
     if (isEndXBeforeStartX) {
-        console.log('end x before start x ', endX, startX)
       d = `M${startX} ${startY} L${endX + 5} ${startY}`
     }
 

@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactNode, SetStateAction, createContext, useRef, useState } from "react"
+import React, { Dispatch, MutableRefObject, ReactNode, SetStateAction, createContext, useRef, useState } from "react"
 
 export interface Arrow {
     id: number,
@@ -10,25 +10,24 @@ export interface Arrow {
     dragging: boolean
 }
 
-interface NodeInfo {
-    element: HTMLElement | null;
-    parentId: string;
-  }
-  
-interface Nodes {
-    [key: string]: NodeInfo;
+interface Node {
+    ref: HTMLElement | null;
+    parentId: number;
+    location: 'left' | 'right' | 'top' | 'bottom'
 }
 
 interface ArrowsContextType {
     arrows: Arrow[],
     setArrows: Dispatch<SetStateAction<Arrow[]>>
-    nodes: Nodes,
+    nodes: MutableRefObject<Node[]>,
+    checkOverlap: (parentId: number, x: number, y: number) => void
 }
 
 export const ArrowsContext = createContext<ArrowsContextType>({
     arrows: [],
     setArrows: () => {},
-    nodes: {},
+    nodes: { current: [] },
+    checkOverlap: () => {}
 })
 
 interface ArrowsProviderProps {
@@ -37,10 +36,36 @@ interface ArrowsProviderProps {
 
 export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
     const [arrows, setArrows] = useState<Arrow[]>([])
-    const nodes = useRef<Nodes>({})
+    const nodes = useRef<Node[]>([])
+
+    function checkOverlap (parentId: number, arrowId: number, x: number, y: number) {
+        nodes.current.filter(n => n.parentId !== parentId).map(({ ref }) => {
+            if (!ref) return
+            const startX = ref?.getBoundingClientRect().x
+            const endX = ref?.getBoundingClientRect().x + ref?.getBoundingClientRect().width
+            const startY = ref?.getBoundingClientRect().y
+            const endY = ref?.getBoundingClientRect().y + ref?.getBoundingClientRect().height
+
+            if (x > startX && x < endX && y < endY && y > startY) {
+                setArrows(arrows.map((a) => a.id === arrowId ? {
+                    ...a,
+                    endX,
+                    endY
+                } : a))
+            } else {
+                setArrows(arrows.map((a) => a.id === arrowId ? {
+                    ...a,
+                    endX: x,
+                    endY: y
+                } : a))
+            }
+        })
+    }
+
+    console.log("arrows ", arrows[0])
 
     return (
-        <ArrowsContext.Provider value={{ arrows, setArrows, nodes }}>
+        <ArrowsContext.Provider value={{ arrows, setArrows, nodes, checkOverlap }}>
             { children }
         </ArrowsContext.Provider>
     )

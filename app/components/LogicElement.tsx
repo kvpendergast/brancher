@@ -12,7 +12,7 @@ interface LogicElementProps {
 const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, onDrag, children }, ref) => {
     const [isDragging, setIsDragging] = useState(false);
 
-    const { arrows, setArrows, nodes: nodeRefs } = useContext(ArrowsContext)
+    const { arrows, setArrows, nodes, checkOverlap } = useContext(ArrowsContext)
 
     const handleMouseDownOnCircle = (event: React.MouseEvent<HTMLDivElement>) => {
         // Prevent the onDrag for the LogicElement from firing
@@ -34,11 +34,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
         if (isDragging) {
             const draggingArrow: Arrow | undefined = arrows.find((a) => a.dragging)
             if (!draggingArrow) return
-            setArrows([...arrows.filter((a) => !a.dragging), {
-                ...draggingArrow,
-                endX: event.clientX,
-                endY: event.clientY
-            }]);
+            checkOverlap(id, draggingArrow.id, event.clientX, event.clientY)
         }
     };
 
@@ -89,8 +85,12 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
                 <div
                     id='right'
                     ref={(el) => {
-                        if (el && !nodeRefs.current['right']) {
-                            nodeRefs.current['right'] = el;
+                        if (el && !nodes.current.find((n) => n.parentId === id && n.location === 'right')) {
+                            nodes.current.push({
+                                parentId: id, 
+                                location: 'right',
+                                ref: el
+                            })
                         }
                     }}
                     className='absolute w-2 h-2 rounded-full bg-black -right-1 top-1/2 transform -translate-y-1/2 hover:w-4 hover:h-4 hover:-right-2'
@@ -99,8 +99,12 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
                 <div
                     id='bottom'
                     ref={(el) => {
-                        if (el && !nodeRefs.current['bottom']) {
-                            nodeRefs.current['bottom'] = el;
+                        if (el && !nodes.current.find((n) => n.parentId === id && n.location === 'bottom')) {
+                            nodes.current.push({
+                                parentId: id, 
+                                location: 'bottom',
+                                ref: el
+                            })
                         }
                     }}
                     className='absolute w-2 h-2 rounded-full bg-black right-1/2 -bottom-1 transform translate-x-1/2 hover:w-4 hover:h-4 hover:-bottom-2'
@@ -109,8 +113,12 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
                 <div
                     id='top'
                     ref={(el) => {
-                        if (el && !nodeRefs.current['top']) {
-                            nodeRefs.current['top'] = el;
+                        if (el && !nodes.current.find((n) => n.parentId === id && n.location === 'top')) {
+                            nodes.current.push({
+                                parentId: id, 
+                                location: 'top',
+                                ref: el
+                            })
                         }
                     }}
                     className='absolute w-2 h-2 rounded-full bg-black right-1/2 -top-1 transform translate-x-1/2 hover:w-4 hover:h-4 hover:-top-2'
@@ -119,8 +127,12 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
                 <div
                     id='left'
                     ref={(el) => {
-                        if (el && !nodeRefs.current['left']) {
-                            nodeRefs.current['left'] = el;
+                        if (el && !nodes.current.find((n) => n.parentId === id && n.location === 'left')) {
+                            nodes.current.push({
+                                parentId: id, 
+                                location: 'left',
+                                ref: el
+                            })
                         }
                     }}
                     className='absolute w-2 h-2 rounded-full bg-black top-1/2 -left-1 transform -translate-y-1/2 hover:w-4 hover:h-4 hover:-left-2'
