@@ -39,7 +39,7 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
     const nodes = useRef<Node[]>([])
 
     function moveArrow (parentId: number, arrowId: number, x: number, y: number) {
-        nodes.current.filter(n => n.parentId !== parentId).some(({ ref }) => {
+        nodes.current.filter(n => n.parentId !== parentId).some(({ parentId, ref }) => {
             if (!ref) return
             const startBoundX = ref?.getBoundingClientRect().x
             const endBoundX = ref?.getBoundingClientRect().x + ref?.getBoundingClientRect().width
@@ -51,6 +51,7 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
                     ...a,
                     endX: endBoundX - ref?.getBoundingClientRect().width / 2,
                     endY: endBoundY - ref?.getBoundingClientRect().height,
+                    endParent: parentId 
                 } : a))
                 return true
             } else {
@@ -58,6 +59,7 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
                     ...a,
                     endX: x,
                     endY: y,
+                    endParent: null
                 } : a))
             }
 

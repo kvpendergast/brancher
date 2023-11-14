@@ -52,9 +52,26 @@ const BranchPage = () => {
   };
 
   function handleArrowsUpdate(parentId: number, diffX: number, diffY: number) {
-    setArrows(arrows.map((a) => a.parentId === parentId ? {
+    setArrows(arrows.map((a) => (a.parentId === parentId) ? {
       ...a, startX: a.startX + diffX, startY: a.startY + diffY
     } : a))
+    setArrows(arrows.map((a) => {
+      if (a.parentId === parentId) {
+        return {
+          ...a, 
+          startX: a.startX + diffX,
+          startY: a.startY + diffY
+        }
+      } else if (a.endParent === parentId) {
+        return {
+          ...a,
+          endX: a.endX + diffX,
+          endY: a.endY + diffY
+        }
+      } else {
+        return a
+      }
+    }))
   }
 
   const onDrag = (e: MouseEvent) => {
