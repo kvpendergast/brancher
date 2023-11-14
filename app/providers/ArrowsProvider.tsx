@@ -41,16 +41,16 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
     function moveArrow (parentId: number, arrowId: number, x: number, y: number) {
         nodes.current.filter(n => n.parentId !== parentId).some(({ ref }) => {
             if (!ref) return
-            const startX = ref?.getBoundingClientRect().x
-            const endX = ref?.getBoundingClientRect().x + ref?.getBoundingClientRect().width
-            const startY = ref?.getBoundingClientRect().y
-            const endY = ref?.getBoundingClientRect().y + ref?.getBoundingClientRect().height
+            const startBoundX = ref?.getBoundingClientRect().x
+            const endBoundX = ref?.getBoundingClientRect().x + ref?.getBoundingClientRect().width
+            const startBoundY = ref?.getBoundingClientRect().y
+            const endBoundY = ref?.getBoundingClientRect().y + ref?.getBoundingClientRect().height
 
-            if (x > startX && x < endX && y < endY && y > startY) {
+            if (x > startBoundX && x < endBoundX && y < endBoundY && y > startBoundY) {
                 setArrows(arrows.map((a) => a.id === arrowId ? {
                     ...a,
-                    endX,
-                    endY,
+                    endX: endBoundX - ref?.getBoundingClientRect().width / 2,
+                    endY: endBoundY - ref?.getBoundingClientRect().height,
                 } : a))
                 return true
             } else {
