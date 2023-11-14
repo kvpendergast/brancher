@@ -12,7 +12,7 @@ interface LogicElementProps {
 const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, onDrag, children }, ref) => {
     const [isDragging, setIsDragging] = useState(false);
 
-    const { arrows, setArrows, nodes, checkOverlap } = useContext(ArrowsContext)
+    const { arrows, setArrows, nodes, moveArrow, stopArrow } = useContext(ArrowsContext)
 
     const handleMouseDownOnCircle = (event: React.MouseEvent<HTMLDivElement>) => {
         // Prevent the onDrag for the LogicElement from firing
@@ -34,7 +34,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
         if (isDragging) {
             const draggingArrow: Arrow | undefined = arrows.find((a) => a.dragging)
             if (!draggingArrow) return
-            checkOverlap(id, draggingArrow.id, event.clientX, event.clientY)
+            moveArrow(id, draggingArrow.id, event.clientX, event.clientY)
         }
     };
 
@@ -42,12 +42,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
         setIsDragging(false);
         const draggingArrow: Arrow | undefined = arrows.find((a) => a.dragging)
         if (!draggingArrow) return
-        setArrows([...arrows.filter((a) => !a.dragging), {
-            ...draggingArrow,
-            endX: event.clientX,
-            endY: event.clientY,
-            dragging: false
-        }])
+        stopArrow(draggingArrow.id, event.clientX, event.clientY)
     };
 
     function handleOnDrag (e: React.MouseEvent<HTMLDivElement>) {
@@ -62,6 +57,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
         }
 
         return () => {
+            console.log('removing in LogicElement')
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
         };
@@ -93,7 +89,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
                             })
                         }
                     }}
-                    className='absolute w-2 h-2 rounded-full bg-black -right-1 top-1/2 transform -translate-y-1/2 hover:w-4 hover:h-4 hover:-right-2'
+                    className='absolute w-4 h-4 rounded-full bg-black -right-2 top-1/2 transform -translate-y-1/2'
                     onMouseDown={handleMouseDownOnCircle}
                 />
                 <div
@@ -107,7 +103,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
                             })
                         }
                     }}
-                    className='absolute w-2 h-2 rounded-full bg-black right-1/2 -bottom-1 transform translate-x-1/2 hover:w-4 hover:h-4 hover:-bottom-2'
+                    className='absolute w-4 h-4 rounded-full bg-black right-1/2 -bottom-2 transform translate-x-1/2'
                     onMouseDown={handleMouseDownOnCircle}
                 />
                 <div
@@ -121,7 +117,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
                             })
                         }
                     }}
-                    className='absolute w-2 h-2 rounded-full bg-black right-1/2 -top-1 transform translate-x-1/2 hover:w-4 hover:h-4 hover:-top-2'
+                    className='absolute w-4 h-4 rounded-full bg-black right-1/2 -top-2 transform translate-x-1/2'
                     onMouseDown={handleMouseDownOnCircle}
                 />
                 <div
@@ -135,7 +131,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
                             })
                         }
                     }}
-                    className='absolute w-2 h-2 rounded-full bg-black top-1/2 -left-1 transform -translate-y-1/2 hover:w-4 hover:h-4 hover:-left-2'
+                    className='absolute w-4 h-4 rounded-full bg-black top-1/2 -left-2 transform -translate-y-1/2'
                     onMouseDown={handleMouseDownOnCircle}
                 />
             </div>

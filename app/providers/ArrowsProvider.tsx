@@ -20,14 +20,14 @@ interface ArrowsContextType {
     arrows: Arrow[],
     setArrows: Dispatch<SetStateAction<Arrow[]>>
     nodes: MutableRefObject<Node[]>,
-    checkOverlap: (parentId: number, x: number, y: number) => void
+    moveArrow: (parentId: number, arrowId: number, x: number, y: number) => void
 }
 
 export const ArrowsContext = createContext<ArrowsContextType>({
     arrows: [],
     setArrows: () => {},
     nodes: { current: [] },
-    checkOverlap: () => {}
+    moveArrow: () => {}
 })
 
 interface ArrowsProviderProps {
@@ -38,8 +38,8 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
     const [arrows, setArrows] = useState<Arrow[]>([])
     const nodes = useRef<Node[]>([])
 
-    function checkOverlap (parentId: number, arrowId: number, x: number, y: number) {
-        nodes.current.filter(n => n.parentId !== parentId).map(({ ref }) => {
+    function moveArrow (parentId: number, arrowId: number, x: number, y: number) {
+        nodes.current.filter(n => n.parentId !== parentId).some(({ ref }) => {
             if (!ref) return
             const startX = ref?.getBoundingClientRect().x
             const endX = ref?.getBoundingClientRect().x + ref?.getBoundingClientRect().width
@@ -50,22 +50,38 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
                 setArrows(arrows.map((a) => a.id === arrowId ? {
                     ...a,
                     endX,
-                    endY
+                    endY,
                 } : a))
+                return true
             } else {
                 setArrows(arrows.map((a) => a.id === arrowId ? {
                     ...a,
                     endX: x,
-                    endY: y
+                    endY: y,
                 } : a))
             }
+
+            return false
         })
     }
 
-    console.log("arrows ", arrows[0])
+    function stopArrow (arrowId: number, x: number, y: number) {
+        setArrows((prevState) => prevState.map((a) => a.id === arrowId ? {
+            ...a,
+            endX: a.endX,
+            endY: a.endY,
+            dragging: false,
+        } : a))
+    }
 
     return (
-        <ArrowsContext.Provider value={{ arrows, setArrows, nodes, checkOverlap }}>
+        <ArrowsContext.Provider value={{
+            arrows,
+            setArrows,
+            nodes,
+            moveArrow,
+            stopArrow
+        }}>
             { children }
         </ArrowsContext.Provider>
     )

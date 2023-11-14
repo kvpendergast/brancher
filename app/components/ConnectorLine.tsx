@@ -13,7 +13,7 @@ interface ConnectorLineType {
 export default function ConnectorLine ({ id, startX, startY, endX, endY }: ConnectorLineType) {
     const [isDragging, setIsDragging] = useState(false)
 
-    const { arrows, setArrows, checkOverlap } = useContext(ArrowsContext)
+    const { arrows, moveArrow, stopArrow } = useContext(ArrowsContext)
 
     // Function to handle the click event
     const onMouseDown = () => {
@@ -24,14 +24,15 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }: Conne
         if (isDragging) {
             const draggingArrow = arrows.find((a) => a.id === id)
             if (!draggingArrow) return
-            checkOverlap(draggingArrow?.parentId, draggingArrow.id, event.clientX, event.clientY)
+            moveArrow(draggingArrow?.parentId, draggingArrow.id, event.clientX, event.clientY)
         }
     }
 
     const onMouseUp = (event: MouseEvent) => {
         setIsDragging(false)
         const draggingArrow = arrows.find((a) => a.id === id)
-        checkOverlap(draggingArrow?.parentId, draggingArrow.id, event.clientX, event.clientY)
+        if (!draggingArrow) return
+        stopArrow(draggingArrow.id, event.clientX, event.clientY)
     }
 
     useEffect(() => {
@@ -41,6 +42,7 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }: Conne
         }
 
         return () => {
+            console.log('removing in connector line')
             window.removeEventListener('mousemove', onMouseMove)
             window.removeEventListener('mouseup', onMouseUp)
         }
