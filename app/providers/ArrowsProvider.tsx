@@ -3,10 +3,19 @@ import React, { Dispatch, MutableRefObject, ReactNode, SetStateAction, createCon
 export interface Arrow {
     id: number,
     parentId: number,
+    endParentId?: number | null,
     startX: number,
     endX: number,
     startY: number,
     endY: number,
+    dragging: boolean
+}
+
+export interface Rectangle {
+    id: number,
+    x: number,
+    y: number,
+    color: string,
     dragging: boolean
 }
 
@@ -16,18 +25,32 @@ interface Node {
     location: 'left' | 'right' | 'top' | 'bottom'
 }
 
+interface EditConfiguration {
+    color: string
+}
+
 interface ArrowsContextType {
     arrows: Arrow[],
     setArrows: Dispatch<SetStateAction<Arrow[]>>
     nodes: MutableRefObject<Node[]>,
-    moveArrow: (parentId: number, arrowId: number, x: number, y: number) => void
+    moveArrow: (parentId: number, arrowId: number, x: number, y: number) => void,
+    stopArrow: (arrowId: number) => void,
+    editConfiguration: EditConfiguration,
+    setEditConfiguration: Dispatch<SetStateAction<EditConfiguration>>
+    rectangles: Rectangle[],
+    setRectangles: Dispatch<SetStateAction<Rectangle[]>>
 }
 
 export const ArrowsContext = createContext<ArrowsContextType>({
     arrows: [],
     setArrows: () => {},
     nodes: { current: [] },
-    moveArrow: () => {}
+    moveArrow: () => {},
+    stopArrow: () => {},
+    editConfiguration: { color: 'bg-red-500' },
+    setEditConfiguration: () => {},
+    rectangles: [{ id: 1, x: 50, y: 50, color: 'bg-red-500', dragging: false }],
+    setRectangles: () => {}
 })
 
 interface ArrowsProviderProps {
@@ -36,6 +59,12 @@ interface ArrowsProviderProps {
 
 export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
     const [arrows, setArrows] = useState<Arrow[]>([])
+    const [rectangles, setRectangles] = useState([
+        { id: 1, x: 50, y: 50, color: 'bg-red-500', dragging: false },
+      ]);
+    const [editConfiguration, setEditConfiguration] = useState({
+        color: 'bg-red-500'
+    })
     const nodes = useRef<Node[]>([])
 
     function moveArrow (parentId: number, arrowId: number, x: number, y: number) {
@@ -51,7 +80,7 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
                     ...a,
                     endX: endBoundX - ref?.getBoundingClientRect().width / 2,
                     endY: endBoundY - ref?.getBoundingClientRect().height,
-                    endParent: parentId 
+                    endParentId: parentId 
                 } : a))
                 return true
             } else {
@@ -59,7 +88,7 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
                     ...a,
                     endX: x,
                     endY: y,
-                    endParent: null
+                    endParentId: null
                 } : a))
             }
 
@@ -67,7 +96,7 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
         })
     }
 
-    function stopArrow (arrowId: number, x: number, y: number) {
+    function stopArrow (arrowId: number) {
         setArrows((prevState) => prevState.map((a) => a.id === arrowId ? {
             ...a,
             endX: a.endX,
@@ -82,7 +111,11 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
             setArrows,
             nodes,
             moveArrow,
-            stopArrow
+            stopArrow,
+            editConfiguration,
+            setEditConfiguration,
+            rectangles,
+            setRectangles
         }}>
             { children }
         </ArrowsContext.Provider>

@@ -5,11 +5,7 @@ import { ArrowsContext } from '../providers/ArrowsProvider';
 import ConnectorLine from '../components/ConnectorLine';
 
 const BranchPage = () => {
-  const [rectangles, setRectangles] = useState([
-    { id: 1, x: 50, y: 50, dragging: false },
-  ]);
-
-  const { arrows, setArrows } = useContext(ArrowsContext)
+  const { arrows, setArrows, rectangles, setRectangles, editConfiguration } = useContext(ArrowsContext)
 
   type RefsType = {
     [key in number]: HTMLElement | null;
@@ -28,6 +24,7 @@ const BranchPage = () => {
   function createLogicStep() {
     setRectangles([...rectangles, {
       id: rectangles.length + 1,
+      color: editConfiguration.color,
       x: 50,
       y: 50,
       dragging: false
@@ -62,7 +59,7 @@ const BranchPage = () => {
           startX: a.startX + diffX,
           startY: a.startY + diffY
         }
-      } else if (a.endParent === parentId) {
+      } else if (a.endParentId === parentId) {
         return {
           ...a,
           endX: a.endX + diffX,
@@ -131,6 +128,7 @@ const BranchPage = () => {
         {rectangles.map((rectangle) => 
           <LogicElement
             id={rectangle.id}
+            color={rectangle.color}
             key={rectangle.id}
             ref={(el) => {
               if (el && !refs.current[rectangle.id]) {

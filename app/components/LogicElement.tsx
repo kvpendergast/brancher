@@ -9,7 +9,7 @@ interface LogicElementProps {
     children: ReactNode;
 }
 
-const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, onDrag, children }, ref) => {
+const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, color, x, y, onDrag, children }, ref) => {
     const [isDragging, setIsDragging] = useState(false);
 
     const { arrows, setArrows, nodes, moveArrow, stopArrow } = useContext(ArrowsContext)
@@ -74,7 +74,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, x, y, 
         >
             <div
                 ref={ref}
-                className='w-[200px] h-[200px] bg-red-400 relative'
+                className={`w-[200px] h-[200px] ${color} relative`}
                 onMouseDown={handleOnDrag}
             >
                 {children}
