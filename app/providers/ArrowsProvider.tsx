@@ -26,7 +26,8 @@ interface Node {
 }
 
 interface EditConfiguration {
-    color: string
+    color: string,
+    focusedElementId?: number | null | undefined
 }
 
 interface ArrowsContextType {
@@ -38,7 +39,8 @@ interface ArrowsContextType {
     editConfiguration: EditConfiguration,
     setEditConfiguration: Dispatch<SetStateAction<EditConfiguration>>
     rectangles: Rectangle[],
-    setRectangles: Dispatch<SetStateAction<Rectangle[]>>
+    setRectangles: Dispatch<SetStateAction<Rectangle[]>>,
+    deleteElement: (elementId: number | null) => void
 }
 
 export const ArrowsContext = createContext<ArrowsContextType>({
@@ -50,7 +52,8 @@ export const ArrowsContext = createContext<ArrowsContextType>({
     editConfiguration: { color: 'bg-red-500' },
     setEditConfiguration: () => {},
     rectangles: [{ id: 1, x: 50, y: 50, color: 'bg-red-500', dragging: false }],
-    setRectangles: () => {}
+    setRectangles: () => {},
+    deleteElement: () => {}
 })
 
 interface ArrowsProviderProps {
@@ -105,6 +108,11 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
         } : a))
     }
 
+    function deleteElement (elementId: number | null) {
+        if (!elementId) return
+        setRectangles([...rectangles.filter((r) => r.id !== elementId)])
+    }
+
     return (
         <ArrowsContext.Provider value={{
             arrows,
@@ -115,7 +123,8 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps) => {
             editConfiguration,
             setEditConfiguration,
             rectangles,
-            setRectangles
+            setRectangles,
+            deleteElement
         }}>
             { children }
         </ArrowsContext.Provider>

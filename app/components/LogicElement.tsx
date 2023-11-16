@@ -1,10 +1,12 @@
 import React, { ReactNode, forwardRef, useContext, useEffect, useRef, useState } from 'react';
 import { Arrow, ArrowsContext } from '../providers/ArrowsProvider';
+import { useClickOff } from '../hooks/useClickOff';
 
 interface LogicElementProps {
     id: number;
     x: number;
     y: number;
+    color: string;
     onDrag: (id: number, e: React.MouseEvent<HTMLDivElement>) => void;
     children: ReactNode;
 }
@@ -12,7 +14,8 @@ interface LogicElementProps {
 const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, color, x, y, onDrag, children }, ref) => {
     const [isDragging, setIsDragging] = useState(false);
 
-    const { arrows, setArrows, nodes, moveArrow, stopArrow } = useContext(ArrowsContext)
+    const { arrows, setArrows, nodes, moveArrow, stopArrow, editConfiguration, setEditConfiguration } = useContext(ArrowsContext)
+    const otherRef = useRef(null)
 
     const handleMouseDownOnCircle = (event: React.MouseEvent<HTMLDivElement>) => {
         // Prevent the onDrag for the LogicElement from firing
@@ -42,10 +45,11 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, color,
         setIsDragging(false);
         const draggingArrow: Arrow | undefined = arrows.find((a) => a.dragging)
         if (!draggingArrow) return
-        stopArrow(draggingArrow.id, event.clientX, event.clientY)
+        stopArrow(draggingArrow.id)
     };
 
     function handleOnDrag (e: React.MouseEvent<HTMLDivElement>) {
+        setEditConfiguration({ ...editConfiguration, focusedElementId: id })
         onDrag(id, e)
     }
 
@@ -65,6 +69,7 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, color,
 
     return (
         <div
+            ref={otherRef}
             style={{
                 top: `${y}px`,
                 left: `${x}px`,
@@ -74,7 +79,8 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, color,
         >
             <div
                 ref={ref}
-                className={`w-[200px] h-[200px] ${color} relative`}
+                onClick={() => setEditConfiguration({ ...editConfiguration, focusedElementId: id })}
+                className={`w-[200px] h-[200px] ${color} relative ${editConfiguration.focusedElementId === id ? 'border-4 border-black' : ''}`}
                 onMouseDown={handleOnDrag}
             >
                 {children}

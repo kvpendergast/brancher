@@ -32,7 +32,7 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }: Conne
         setIsDragging(false)
         const draggingArrow = arrows.find((a) => a.id === id)
         if (!draggingArrow) return
-        stopArrow(draggingArrow.id, event.clientX, event.clientY)
+        stopArrow(draggingArrow.id)
     }
 
     useEffect(() => {

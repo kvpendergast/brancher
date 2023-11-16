@@ -22,17 +22,17 @@ const BranchPage = () => {
   const [dragStart, setDragStart] = useState<DragStartType>({ id: null, x: 0, y: 0 });
 
   function createLogicStep() {
+    let id = 0
+    if (rectangles[rectangles.length - 1]) {
+      id = rectangles[rectangles.length - 1].id + 1
+    }
     setRectangles([...rectangles, {
-      id: rectangles.length + 1,
+      id,
       color: editConfiguration.color,
       x: 50,
       y: 50,
       dragging: false
     }])
-  }
-
-  function createActionStep() {
-    console.log('creating...')
   }
 
   const onDragStart = (id: number, e: React.MouseEvent<HTMLDivElement>) => {
@@ -133,6 +133,7 @@ const BranchPage = () => {
             ref={(el) => {
               if (el && !refs.current[rectangle.id]) {
                 refs.current[rectangle.id] = el;
+                return refs.current[rectangle.id]
               }
             }}
             x={rectangle.x}
@@ -142,7 +143,7 @@ const BranchPage = () => {
             {/* You can add a button or any content here */}
           </LogicElement>
         )}
-        <Toolbar createLogicStep={createLogicStep} createActionStep={createActionStep} />
+        <Toolbar createLogicStep={createLogicStep} />
         {arrows.map((a) => <ConnectorLine
           id={a.id}
           key={a.id}
