@@ -17,6 +17,11 @@ jobs:
 
     - name: Install Dependencies
       run: npm install
+      env:
+        FONTAWESOME_TOKEN: ${{ secrets.FONTAWESOME_TOKEN }}
+    - name: Set up .npmrc
+      run: echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
+            echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_TOKEN }}" >> .npmrc
 
     - name: Run ESLint
       run: npm run lint
