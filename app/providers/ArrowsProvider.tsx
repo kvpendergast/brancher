@@ -114,9 +114,16 @@ export const ArrowsProvider = ({ children }: ArrowsProviderProps): JSX.Element =
       : a))
   }
 
+  function deleteArrows (arrowsToDelete: Arrow[]): void {
+    const arrowIds = arrowsToDelete.map((a) => a.id)
+    setArrows([...arrows.filter((a) => !arrowIds.find((id) => a.id === id))])
+  }
+
   function deleteElement (elementId: number | null): void {
     if (!elementId) return
     setRectangles([...rectangles.filter((r) => r.id !== elementId)])
+    const arrowsToDelete = arrows.filter((a) => a.endParentId === elementId || a.parentId === elementId)
+    deleteArrows(arrowsToDelete)
   }
 
   return (
