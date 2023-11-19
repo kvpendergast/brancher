@@ -1,71 +1,69 @@
 import React, { useContext, useEffect, useState } from 'react'
-import _ from 'lodash'
-import { ArrowsContext } from '../providers/ArrowsProvider';
+import { ArrowsContext } from '../providers/ArrowsProvider'
 
 interface ConnectorLineType {
-    id: number,
-    startX: number,
-    startY: number,
-    endX: number,
-    endY: number
+  id: number
+  startX: number
+  startY: number
+  endX: number
+  endY: number
 }
 
-export default function ConnectorLine ({ id, startX, startY, endX, endY }: ConnectorLineType) {
-    const [isDragging, setIsDragging] = useState(false)
+export default function ConnectorLine ({ id, startX, startY, endX, endY }: ConnectorLineType): JSX.Element {
+  const [isDragging, setIsDragging] = useState(false)
 
-    const { arrows, moveArrow, stopArrow } = useContext(ArrowsContext)
+  const { arrows, moveArrow, stopArrow } = useContext(ArrowsContext)
 
-    // Function to handle the click event
-    const onMouseDown = () => {
-        setIsDragging(true)
-    };
+  // Function to handle the click event
+  const onMouseDown = (): void => {
+    setIsDragging(true)
+  }
 
-    const onMouseMove = (event: MouseEvent) => {
-        if (isDragging) {
-            const draggingArrow = arrows.find((a) => a.id === id)
-            if (!draggingArrow) return
-            moveArrow(draggingArrow?.parentId, draggingArrow.id, event.clientX, event.clientY)
-        }
+  const onMouseMove = (event: MouseEvent): void => {
+    if (isDragging) {
+      const draggingArrow = arrows.find((a) => a.id === id)
+      if (!draggingArrow) return
+      moveArrow(draggingArrow?.parentId, draggingArrow.id, event.clientX, event.clientY)
+    }
+  }
+
+  const onMouseUp = (event: MouseEvent): void => {
+    setIsDragging(false)
+    const draggingArrow = arrows.find((a) => a.id === id)
+    if (!draggingArrow) return
+    stopArrow(draggingArrow.id)
+  }
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', onMouseMove)
+      window.addEventListener('mouseup', onMouseUp)
     }
 
-    const onMouseUp = (event: MouseEvent) => {
-        setIsDragging(false)
-        const draggingArrow = arrows.find((a) => a.id === id)
-        if (!draggingArrow) return
-        stopArrow(draggingArrow.id)
+    return () => {
+      console.log('removing in connector line')
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
     }
+  }, [isDragging])
 
-    useEffect(() => {
-        if (isDragging) {
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
-        }
+  const isEndBelowStart = endY > startY
+  const isEndXBeforeStartX = endX < startX
 
-        return () => {
-            console.log('removing in connector line')
-            window.removeEventListener('mousemove', onMouseMove)
-            window.removeEventListener('mouseup', onMouseUp)
-        }
+  // Define the path 'd' attribute
+  let d = `M${startX} ${startY} L${endX - 5} ${startY}` // Move to start point
 
-    }, [isDragging])
+  if (isEndXBeforeStartX) {
+    d = `M${startX} ${startY} L${endX + 5} ${startY}`
+  }
 
-    const isEndBelowStart = endY > startY;
-    const isEndXBeforeStartX = endX < startX;
-    
-    // Define the path 'd' attribute
-    let d = `M${startX} ${startY} L${endX - 5} ${startY}`; // Move to start point
+  if (isEndBelowStart) {
+    d += `S${endX} ${startY} ${endX} ${startY + 5} L${endX} ${endY}`
+  } else {
+    d += `S${endX} ${startY} ${endX} ${startY - 5} L${endX} ${endY}`
+  }
 
-    if (isEndXBeforeStartX) {
-      d = `M${startX} ${startY} L${endX + 5} ${startY}`
-    }
-
-    if (isEndBelowStart) {
-        d += `S${endX} ${startY} ${endX} ${startY + 5} L${endX} ${endY}`
-    } else {
-        d += `S${endX} ${startY} ${endX} ${startY - 5} L${endX} ${endY}`
-    }
-
-    return (
+  return (
         <svg className='absolute top-0 left-0 w-full h-full' style={{ pointerEvents: 'none' }}>
             <defs>
                 <marker
@@ -97,5 +95,5 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }: Conne
                 style={{ cursor: 'pointer', pointerEvents: 'all' }} // Changes the cursor to indicate it's clickable
             />
         </svg>
-    );
+  )
 }

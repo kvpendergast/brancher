@@ -1,22 +1,22 @@
 import React from 'react'
-import stylesheet from '../styles/app.css';
-
-export const links: LinksFunction = () => [
-  // @ts-ignore
-  { rel: "stylesheet", href: stylesheet },
-];
+import stylesheet from '../styles/app.css'
 
 import {
-    Links,
-    Meta,
-    Outlet,
-    LiveReload,
-    Scripts,
-  } from "@remix-run/react";
-import { LinksFunction } from '@remix-run/node';
-  
-  export default function App() {
-    return (
+  Links,
+  Meta,
+  Outlet,
+  LiveReload,
+  Scripts
+} from '@remix-run/react'
+import { type LinksFunction } from '@remix-run/node'
+
+export const links: LinksFunction = () => [
+  // @ts-expect-error Need this for tailwindcss to work
+  { rel: 'stylesheet', href: stylesheet }
+]
+
+export default function App (): JSX.Element {
+  return (
       <html>
         <head>
           <link
@@ -28,11 +28,10 @@ import { LinksFunction } from '@remix-run/node';
         </head>
         <body className='h-screen w-full'>
           <Outlet />
-      
+
           <Scripts />
           <LiveReload />
         </body>
       </html>
-    );
-  }
-  
+  )
+}

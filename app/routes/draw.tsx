@@ -1,27 +1,27 @@
-import React, { useState, useEffect, useRef, createContext, useContext } from 'react';
-import LogicElement from '../components/LogicElement';
-import Toolbar from '../components/Toolbar';
-import { ArrowsContext } from '../providers/ArrowsProvider';
-import ConnectorLine from '../components/ConnectorLine';
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import LogicElement from '../components/LogicElement'
+import Toolbar from '../components/Toolbar'
+import { ArrowsContext } from '../providers/ArrowsProvider'
+import ConnectorLine from '../components/ConnectorLine'
 
-const BranchPage = () => {
+const BranchPage = (): JSX.Element => {
   const { arrows, setArrows, rectangles, setRectangles, editConfiguration } = useContext(ArrowsContext)
 
   type RefsType = {
     [key in number]: HTMLElement | null;
-  };
+  }
 
   const refs = useRef<RefsType>({})
 
   interface DragStartType {
-    id: number | null,
-    x: number, 
+    id: number | null
+    x: number
     y: number
   }
-  
-  const [dragStart, setDragStart] = useState<DragStartType>({ id: null, x: 0, y: 0 });
 
-  function createLogicStep() {
+  const [dragStart, setDragStart] = useState<DragStartType>({ id: null, x: 0, y: 0 })
+
+  function createLogicStep (): void {
     let id = 0
     if (rectangles[rectangles.length - 1]) {
       id = rectangles[rectangles.length - 1].id + 1
@@ -35,27 +35,29 @@ const BranchPage = () => {
     }])
   }
 
-  const onDragStart = (id: number, e: React.MouseEvent<HTMLDivElement>) => {
+  const onDragStart = (id: number, e: React.MouseEvent<HTMLDivElement>): void => {
     setDragStart({
       id,
       x: e.clientX,
-      y: e.clientY,
-    });
+      y: e.clientY
+    })
     setRectangles(rects =>
       rects.map(rect =>
         rect.id === id ? { ...rect, dragging: true } : rect
-      ),
-    );
-  };
+      )
+    )
+  }
 
-  function handleArrowsUpdate(parentId: number, diffX: number, diffY: number) {
-    setArrows(arrows.map((a) => (a.parentId === parentId) ? {
-      ...a, startX: a.startX + diffX, startY: a.startY + diffY
-    } : a))
+  function handleArrowsUpdate (parentId: number, diffX: number, diffY: number): void {
+    setArrows(arrows.map((a) => (a.parentId === parentId)
+      ? {
+          ...a, startX: a.startX + diffX, startY: a.startY + diffY
+        }
+      : a))
     setArrows(arrows.map((a) => {
       if (a.parentId === parentId) {
         return {
-          ...a, 
+          ...a,
           startX: a.startX + diffX,
           startY: a.startY + diffY
         }
@@ -71,49 +73,49 @@ const BranchPage = () => {
     }))
   }
 
-  const onDrag = (e: MouseEvent) => {
+  const onDrag = (e: MouseEvent): void => {
     if (dragStart.id !== null) {
-      const diffX = e.clientX - dragStart.x;
-      const diffY = e.clientY - dragStart.y;
-      
+      const diffX = e.clientX - dragStart.x
+      const diffY = e.clientY - dragStart.y
+
       setRectangles(rects =>
         rects.map(rect =>
           rect.id === dragStart.id
             ? { ...rect, x: rect.x + diffX, y: rect.y + diffY }
             : rect
-        ),
-      );
+        )
+      )
 
-      handleArrowsUpdate (dragStart.id, diffX, diffY)
+      handleArrowsUpdate(dragStart.id, diffX, diffY)
 
       setDragStart({
         ...dragStart,
         x: e.clientX,
-        y: e.clientY,
-      });
+        y: e.clientY
+      })
     }
-  };
+  }
 
-  const onDragEnd = () => {
+  const onDragEnd = (): void => {
     setRectangles(rects =>
       rects.map(rect =>
         rect.dragging ? { ...rect, dragging: false } : rect
-      ),
-    );
-    setDragStart({ id: null, x: 0, y: 0 });
-  };
+      )
+    )
+    setDragStart({ id: null, x: 0, y: 0 })
+  }
 
   useEffect(() => {
     if (dragStart.id !== null) {
-      document.addEventListener('mousemove', onDrag);
-      document.addEventListener('mouseup', onDragEnd);
+      document.addEventListener('mousemove', onDrag)
+      document.addEventListener('mouseup', onDragEnd)
     }
 
     return () => {
-      document.removeEventListener('mousemove', onDrag);
-      document.removeEventListener('mouseup', onDragEnd);
-    };
-  }, [dragStart, rectangles]);
+      document.removeEventListener('mousemove', onDrag)
+      document.removeEventListener('mouseup', onDragEnd)
+    }
+  }, [dragStart, rectangles])
 
   return (
       <div
@@ -122,17 +124,17 @@ const BranchPage = () => {
           height: '100%',
           position: 'relative',
           border: '1px solid black',
-          overflow: 'hidden', // Prevents scrollbars from appearing during drag
+          overflow: 'hidden' // Prevents scrollbars from appearing during drag
         }}
       >
-        {rectangles.map((rectangle) => 
+        {rectangles.map((rectangle) =>
           <LogicElement
             id={rectangle.id}
             color={rectangle.color}
             key={rectangle.id}
             ref={(el) => {
               if (el && !refs.current[rectangle.id]) {
-                refs.current[rectangle.id] = el;
+                refs.current[rectangle.id] = el
                 return refs.current[rectangle.id]
               }
             }}
@@ -153,7 +155,7 @@ const BranchPage = () => {
           endY={a.endY}
         />)}
       </div>
-  );
-};
+  )
+}
 
-export default BranchPage;
+export default BranchPage
