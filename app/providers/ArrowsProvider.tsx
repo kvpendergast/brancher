@@ -17,6 +17,7 @@ export interface Rectangle {
   y: number
   color: string
   dragging: boolean
+  type: string
 }
 
 interface Node {
@@ -51,7 +52,7 @@ export const ArrowsContext = createContext<ArrowsContextType>({
   stopArrow: () => {},
   editConfiguration: { color: 'bg-red-500' },
   setEditConfiguration: () => {},
-  rectangles: [{ id: 1, x: 50, y: 50, color: 'bg-red-500', dragging: false }],
+  rectangles: [{ id: 1, x: 50, y: 50, color: 'bg-red-500', dragging: false, type: 'text_input' }],
   setRectangles: () => {},
   deleteElement: () => {}
 })
@@ -63,7 +64,7 @@ interface ArrowsProviderProps {
 export const ArrowsProvider = ({ children }: ArrowsProviderProps): JSX.Element => {
   const [arrows, setArrows] = useState<Arrow[]>([])
   const [rectangles, setRectangles] = useState([
-    { id: 1, x: 50, y: 50, color: 'bg-red-500', dragging: false }
+    { id: 1, x: 50, y: 50, color: 'bg-red-500', dragging: false, type: 'text_input' }
   ])
   const [editConfiguration, setEditConfiguration] = useState({
     color: 'bg-red-500'

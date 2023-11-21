@@ -1,5 +1,6 @@
-import React, { type ReactNode, forwardRef, useContext, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, useContext, useEffect, useRef, useState } from 'react'
 import { type Arrow, ArrowsContext } from '../providers/ArrowsProvider'
+import TextArea from './TextArea'
 
 interface LogicElementProps {
   id: number
@@ -7,10 +8,10 @@ interface LogicElementProps {
   y: number
   color: string
   onDrag: (id: number, e: React.MouseEvent<HTMLDivElement>) => void
-  children: ReactNode
+  type: string
 }
 
-const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, color, x, y, onDrag, children }, ref) => {
+const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, color, type, x, y, onDrag }, ref) => {
   const [isDragging, setIsDragging] = useState(false)
 
   const { arrows, setArrows, nodes, moveArrow, stopArrow, editConfiguration, setEditConfiguration } = useContext(ArrowsContext)
@@ -79,10 +80,10 @@ const LogicElement = forwardRef<HTMLDivElement, LogicElementProps>(({ id, color,
             <div
                 ref={ref}
                 onClick={() => { setEditConfiguration({ ...editConfiguration, focusedElementId: id }) }}
-                className={`w-[200px] h-[200px] ${color} relative ${editConfiguration.focusedElementId === id ? 'border-4 border-black' : ''}`}
+                className={`flex items-center justify-center w-[200px] h-[200px] ${color} relative ${editConfiguration.focusedElementId === id ? 'border-4 border-black' : ''}`}
                 onMouseDown={handleOnDrag}
             >
-                {children}
+                {type === 'text_input' && <TextArea />}
                 <div
                     id='right'
                     ref={(el) => {

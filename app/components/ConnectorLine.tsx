@@ -41,7 +41,6 @@ export default function ConnectorLine ({ id, startX, startY, endX, endY }: Conne
     }
 
     return () => {
-      console.log('removing in connector line')
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
     }

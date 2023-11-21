@@ -31,7 +31,8 @@ const BranchPage = (): JSX.Element => {
       color: editConfiguration.color,
       x: 50,
       y: 50,
-      dragging: false
+      dragging: false,
+      type: 'text_input'
     }])
   }
 
@@ -131,6 +132,7 @@ const BranchPage = (): JSX.Element => {
           <LogicElement
             id={rectangle.id}
             color={rectangle.color}
+            type={rectangle.type}
             key={rectangle.id}
             ref={(el) => {
               if (el && !refs.current[rectangle.id]) {
@@ -141,9 +143,7 @@ const BranchPage = (): JSX.Element => {
             x={rectangle.x}
             y={rectangle.y}
             onDrag={onDragStart}
-          >
-            {/* You can add a button or any content here */}
-          </LogicElement>
+          />
         )}
         <Toolbar createLogicStep={createLogicStep} />
         {arrows.map((a) => <ConnectorLine
