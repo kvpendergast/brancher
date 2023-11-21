@@ -26,7 +26,7 @@ export default function TextArea ({ onTextChange, placeholder }: TextAreaProps):
             ref={ref}
             onChange={handleOnChange}
             placeholder={placeholder}
-            className='overflow-y-hidden resize-none bg-transparent text-white'
+            className='overflow-y-hidden resize-none bg-transparent text-white border-0 outline-none text-center'
         />
   )
 }
